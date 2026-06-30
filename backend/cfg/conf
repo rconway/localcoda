@@ -35,6 +35,9 @@ TUTORIALS_VOLUME_ACCESS_MOUNT=
 TUTORIALS_VOLUME_ACCESS_IMAGE=busybox:latest
 #Remote port for connection to backend image (you should never change this, unless you know what you are doing, as this parameter is hardcoded in the entrypoint)
 REMOTE_PORT=1
+#Custom registries.yaml file for k3s
+#Note that this file will be mounted into the backend container at /etc/rancher/k3s/registries.yaml and will be used by k3s when starting the tutorial containers. Can be used to (for example) supply credentials for DockerHub or other private registries - or to configure alternate registries, such as a pull-through cache.
+#K3S_REGISTRY_YAML="/path/to/your/k3s/registries.yaml"
 ##Advanced configuration - LOCAL ORCHESTRATOR
 #Local orchestration engine mount port for backend. If you want to start multiple docker backends on the same machine you will need to set the port to \$RANDOM_PORT in order for the different containers not to clash. This will add also the port to EXT_DOMAIN_NAME and properly update all the urls
 LOCAL_INT_IPPORT=0.0.0.0:\$RANDOM_PORT

@@ -312,6 +312,16 @@ if [[ $ORCHESTRATION_ENGINE == "local" ]]; then
     READY_URL="$EXT_PROTO://$EXT_MAINHOST/"
   fi
 
+  #Check if we have a k3s registry yaml file and, if so, mount it into the container.
+  #We copy the file into /tmp/localcoda/registries.yaml and mount it from there.
+  #The reason we do this is because, in the case that the backend_run.sh script is being invoked
+  #from the lc_frontend container, then we need a path that can be trusted to be accessible from
+  #the host, since the lc_frontend container reuses the host's docker socket.
+  [[ -n "$K3S_REGISTRY_YAML" && -f "$K3S_REGISTRY_YAML" ]] \
+    && mkdir -p /tmp/localcoda \
+    && cp "$K3S_REGISTRY_YAML" /tmp/localcoda/registries.yaml \
+    && DOCKER_RUN_ARGS="$DOCKER_RUN_ARGS -v /tmp/localcoda/registries.yaml:/etc/rancher/k3s/registries.yaml:ro"
+
   #Check local development mode
   if [[ "$LOCAL_DEV_MODE" == "true" ]]; then
     #Mount the www folder from disk
